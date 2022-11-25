@@ -2,16 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import TrajetService from "../services/trajets.service";
 
 
-const delete_r = (id, data, setChild) => {
-    id ?
-        TrajetService.deleteReservation(id).then(response => {
-            data = data.filter((d) => d.id != id)
-            setChild(data)
-        }).catch(err => console.log(err.message)) :
-        console.log(id)
-}
 
-function Child({ data, setChild }) {
+
+function Child({ data, setChild}) {
     const date = new Date()
 
    
@@ -19,6 +12,15 @@ function Child({ data, setChild }) {
     const annuler = (id) => {
         id ?
             TrajetService.annulerReservation(id).then(response => {
+                data = data.filter((d) => d.id != id)
+                setChild(data)
+            }).catch(err => console.log(err.message)) :
+            console.log(id)
+    }
+
+    const delete_r = (id) => {
+        id ?
+            TrajetService.deleteReservation(id).then(response => {
                 data = data.filter((d) => d.id != id)
                 setChild(data)
             }).catch(err => console.log(err.message)) :
@@ -34,7 +36,7 @@ function Child({ data, setChild }) {
                     <div className="card-body">
                         <h3 className="card-subtitle mb-2 text-muted">{item.depart_city} {'-->'} {item.dest_city}</h3>
                         {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(date.getDate() - 1))) ? (
-                            <button href={"/my-reservations/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
+                            <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
                                 Annuler
                             </button>
                         ) : (
@@ -42,7 +44,7 @@ function Child({ data, setChild }) {
                         )}
 
                         {item.shipped ? (
-                            <div href={"/my-reservations/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id, data, setChild)}>
+                            <div href={"/my-reservations/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
                                 Supprimer
                             </div>
                         ) : (
@@ -119,7 +121,7 @@ function MyReservation() {
             {colis ? (
                 <div>
                     <h1> Mes colis en cours </h1>
-                    <Child data={colis_shipped} />
+                    <Child data={colis_shipped} setChild={setColis_shipped}/>
 
                     <h1> Mes colis </h1>
                     <div>
