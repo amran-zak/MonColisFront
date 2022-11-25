@@ -1,7 +1,8 @@
 import './App.css';
 
 import AddTrajets from './components/trajet.component';
-import AutoComplete from './test';
+import MyReservation from './components/my_reservation.component';
+
 
 function App() {
  
@@ -9,8 +10,8 @@ function App() {
     <div className="App">
       
         <AddTrajets/>
-      <AutoComplete/>
-                  
+        <MyReservation/>
+        
     </div>
   );
 }

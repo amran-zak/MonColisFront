@@ -29,8 +29,6 @@ function AddTrajets() {
 //AIzaSyA0Dn6zefo7LDApySiGQVl0vhFjnnVkV4s
 
 
-// console.log("option",options)
-
   const form = useRef();
   const checkBtn = useRef();
 
@@ -55,8 +53,7 @@ function AddTrajets() {
 
 
   const onChangeDepart_city = (e) => {
-    console.log(e.value, e.label)
-    const depart_city = e.value;
+    const depart_city = e.target.value;
     setDepart_city(depart_city);
   };
   const onChangeDepart_country = (e) => {
@@ -142,7 +139,7 @@ function AddTrajets() {
             <Form onSubmit={handleAddTrajet} ref={form}>
               {!successful && (
                 <div>
-                  {/* <div className="form-group" >
+                  <div className="form-group" >
                     <label htmlFor="depart_city">Ville départ <span className="etoilobligatoire">*</span></label>
                     <input
                       type="text"
@@ -152,11 +149,10 @@ function AddTrajets() {
                       onChange={onChangeDepart_city}
                       validations={[required]}
                     /> 
-                  </div>  */}
+                  </div> 
                   {/* Select automatique */}
 
 
-                  {/* <Select options={options} onChange={onChangeDepart_city}/> */}
 
                   <div className="form-group" >
                     <label htmlFor="depart_country">Pays départ <span className="etoilobligatoire">*</span></label>
