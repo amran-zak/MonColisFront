@@ -3,8 +3,11 @@ import TrajetService from "../services/trajets.service";
 
 
 
-function Child({ data, setChild }) {
+
+function Child({ data, setChild}) {
     const date = new Date()
+
+   
 
     const annuler = (id) => {
         id ?
@@ -13,9 +16,20 @@ function Child({ data, setChild }) {
                 setChild(data)
             }).catch(err => console.log(err.message)) :
             console.log(id)
-
-
     }
+
+    const delete_r = (id) => {
+        
+        id ?
+            TrajetService.deleteReservation(id).then(response => {
+                data = data.filter((d) => d.id != id)
+                setChild(data)
+            }).catch(err => console.log(err.message)) :
+            console.log(id)
+    }
+
+    
+
     return (
         <>
             {data.map(item => (
@@ -23,21 +37,30 @@ function Child({ data, setChild }) {
                     <div className="card-body">
                         <h3 className="card-subtitle mb-2 text-muted">{item.depart_city} {'-->'} {item.dest_city}</h3>
                         {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(date.getDate() - 1))) ? (
-                            <button href={"/my-reservations/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
+                            <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
                                 Annuler
                             </button>
-                        ) : (<button href={"/my-reservations/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
-                        Supprimer
-                    </button>)}
+                        ) : (
+                            <div></div>
+                        )}
+
+                        {item.shipped ? (
+                            <div href={"/my-reservations/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
+                                Supprimer
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
 
                     </div><hr />
                 </div>
-            ))}
+            ))
+            }
         </>
     );
 }
 
-function MyTrajet() {
+function MyReservations() {
 
     const [colis, setColis] = useState(undefined);
     const [colis_shipped, setColis_shipped] = useState(undefined);
@@ -99,13 +122,13 @@ function MyTrajet() {
             {colis ? (
                 <div>
                     <h1> Mes colis en cours </h1>
-                    <Child data={colis_shipped} />
+                    <Child data={colis_shipped} setChild={setColis_shipped}/>
 
                     <h1> Mes colis </h1>
                     <div>
 
                     </div>
-                    <Child data={colis} setChild={setColis} />
+                    <Child data={colis} setChild={setColis}/>
                 </div>
             ) : (
                 <div>
@@ -117,4 +140,4 @@ function MyTrajet() {
     );
 };
 
-export default MyTrajet;
+export default MyReservations;
