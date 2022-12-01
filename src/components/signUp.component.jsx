@@ -1,24 +1,26 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
-import '../SignUp.css';
-import register from '../Services/SignUp.service';
+import '../css/SignUp.css';
+import Auth from '../services/auth.service';
 
 function SignUp() {
     const [name , setName] = useState('');
-    const [age , setAge] = useState('');
+    const [phonenumber , setPhoneNumber] = useState('');
     const [email , setEmail] = useState('');
     const [password , setPassword] = useState('');
     const [confPassword , setConfPassword] = useState('');
+
+    const [message, setMessage] = useState(undefined)
 
     // function to update state of name with
     // value enter by user in form
     const handleChange =(e)=>{
       setName(e.target.value);
     }
-    // function to update state of age with value
+    // function to update state of phonenumber with value
     // enter by user in form
-    const handleAgeChange =(e)=>{
-      setAge(e.target.value);
+    const handlePhoneNumberChange =(e)=>{
+      setPhoneNumber(e.target.value);
     }
     // function to update state of email with value
     // enter by user in form
@@ -45,11 +47,13 @@ function SignUp() {
         alert("password Not Match");
       }
       else{
-        // display alert box with user
-        // 'name' and 'email' details .
-        register(email,"LL",name,"DFF", 255 ,password);
-        alert('A form was submitted with Name :"' + name +
-        '" ,Age :"'+age +'" and Email :"' + email + '"');
+        Auth.register(email,phonenumber,name,password).then(
+          response => {
+            setMessage(response.data.message)
+          }
+        ).catch(e => {
+          setMessage(e.message)
+        });
       }
       e.preventDefault();
 
@@ -57,15 +61,14 @@ function SignUp() {
   return (
     <div className="App">
     <header className="App-header">
-    <form onSubmit={(e) => {handleSubmit(e)}}>
+    {
+      !message ? (
+<form onSubmit={(e) => {handleSubmit(e)}}>
      {/*when user submit the form , handleSubmit()
         function will be called .*/}
      <div className='SignUp'>
     <h2> SignUp </h2>
     </div>
-
-    <h3> Sign-up Form </h3>
-    <img src="/gfg.png" />
         <label >
           Name:
         </label><br/>
@@ -73,10 +76,10 @@ function SignUp() {
           { /*when user write in name input box , handleChange()
               function will be called. */}
         <label >
-          Age:
+          Phone number:
         </label><br/>
-        <input type="text" value={age} required onChange={(e)=> {handleAgeChange(e)}} /><br/>
-            { /*when user write in age input box , handleAgeChange()
+        <input type="text" value={phonenumber} required onChange={(e)=> {handlePhoneNumberChange(e)}} /><br/>
+            { /*when user write in phonenumber input box , handlePhoneNumberChange()
                function will be called. */}
         <label>
           Email:
@@ -98,6 +101,11 @@ function SignUp() {
                     handleConfPasswordChange() function will be called.*/}
         <input type="submit" value="Submit"/>
       </form>
+      ): (
+        <h1>{message}</h1>
+      )
+    }
+    
     </header>
 
     </div>

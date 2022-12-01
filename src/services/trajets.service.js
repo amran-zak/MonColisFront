@@ -1,12 +1,38 @@
 import http from "../server";
+import authHeader from "./auth.headers";
 
 
 const API_URL_TRAJET= http.API_URL_TRAJET;
 
+
+const searchTrajet =  async (data) => {
+    try {
+         const response = await API_URL_TRAJET.post(
+             "/search-trajet", { data: data }
+         );
+         return response;
+     } catch (err) {
+         return err;
+     }
+ }
+
+ const reserveTrajet =  async (data) => {
+    try {
+         const response = await API_URL_TRAJET.post(
+             "/reserve-trajet", {headers: authHeader(), data: data }
+         );
+         return response;
+     } catch (err) {
+         return err;
+     }
+ }
+
+
+
 const addTrajet =  async (data) => {
    try {
         const response = await API_URL_TRAJET.post(
-            "/add-trajet", { data: data }
+            "/add-trajet", { headers: authHeader(), data: data }
         );
         return response;
     } catch (err) {
@@ -17,7 +43,7 @@ const addTrajet =  async (data) => {
 const getReservation =  async (_id_em) => {
     try {
          const response = await API_URL_TRAJET.post(
-             "/my-reservations", { _id_em: _id_em }
+             "/my-reservations" , {headers: authHeader()}, {_id_em: _id_em }
          );
          return response;
      } catch (err) {
@@ -49,6 +75,8 @@ const getReservation =  async (_id_em) => {
 
 
 export default {
+    searchTrajet,
+    reserveTrajet,
     addTrajet,
     getReservation,
     annulerReservation,

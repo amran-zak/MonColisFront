@@ -8,9 +8,9 @@ import Login from './components/login.component';
 import AddTrajets from './components/addTrajet.component';
 import ReserveTrajet from './components/reserveTrajet.component'
 import MyReservations from './components/myReservations.component';
-import MyTrajets from './components/myTrajets.component.js'
+import MyTrajets from './components/myTrajets.component'
 
-
+import PageNoFound from './pageNoFound.jsx'
 
 function App() {
  
@@ -24,10 +24,12 @@ function App() {
             <Route  path="/sign-up" element={<SignUp/>} />
             <Route  path="/login" element={<Login/>} />
             <Route  path="/add-trajet" element={<AddTrajets/>} />
-            <Route  path="/reserve-trajet" element={<ReserveTrajet/>} />
-            <Route  path="/my-reservation" element={<MyReservations/>} />
-            <Route  path="/my-trajets" element={<MyTrajets/>} />
-            <Route  path="/search-result" element={<Result/>} />
+            {/* <Route  path="/reserve-trajet" element={<ReserveTrajet/>} /> */}
+            <Route  path="/my-reservations" element={<MyReservations/>} />
+            {/* <Route  path="/my-trajets" element={<MyTrajets/>} /> */}
+            {/* <Route  path="/search-result" element={<Result/>} /> */}
+
+            <Route  path="/*" element={<PageNoFound/>} />
           </Routes>
 
           <h1>Notre footer</h1>

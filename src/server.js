@@ -5,11 +5,11 @@ const URL = "http://localhost:8080/"
 
 
 APIs.API_URL_AUTH = axios.create({
-  baseURL:  URL + "/api/auth",
+  baseURL:  URL + "api/auth",
   headers: {
     "Content-type": "application/json"
   }
-});
+})
 
 
 
