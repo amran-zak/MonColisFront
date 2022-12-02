@@ -1,11 +1,11 @@
 import React, {  useRef, useState } from "react";
-import { Navigate } from 'react-router-dom';
+
 import CheckButton from "react-validation/build/button";
 import Form from "react-validation/build/form";
 
 import TrajetService from "../services/trajets.service";
 
-import AuthService from "../services/auth.service";
+
 
 
 
@@ -27,10 +27,6 @@ const required = (value) => {
 function AddTrajets() {
   
 //AIzaSyA0Dn6zefo7LDApySiGQVl0vhFjnnVkV4s
-const currentUser = AuthService.getCurrentUser();
-
-
-
 
 
   const form = useRef();
@@ -44,11 +40,12 @@ const currentUser = AuthService.getCurrentUser();
   const [depart_city, setDepart_city] = useState("");
   const [depart_country, setDepart_country] = useState("");
   const [dest_city, setDest_city] = useState("");
-  const [dest_country, setDest_country] = useState(""); 
+  const [dest_country, setDest_country] = useState("");
   const [depart_date, setDepart_date] = useState("");
   const [arrival_date, setArrival_date] = useState("");
   const [weight, setWeight] = useState("");
   const [price, setPrice] = useState("");
+  const [passenger, setPassenger] = useState("");
  
 
   
@@ -94,6 +91,10 @@ const currentUser = AuthService.getCurrentUser();
     setPrice(price)
   }
 
+  const onChangePassenger = (e)  => {
+    const passenger = e.target.value;
+    setPassenger(passenger)
+  }
 
 
   const handleAddTrajet = (e) => {
@@ -112,7 +113,7 @@ const currentUser = AuthService.getCurrentUser();
         arrival_date: arrival_date,
         weight: weight,
         price: price,
-        passenger: currentUser.id
+        passenger: passenger
       };
       TrajetService.addTrajet(data).then(
         (response) => {
@@ -127,11 +128,6 @@ const currentUser = AuthService.getCurrentUser();
     }
   };
 
-
-  if (!currentUser) {
-    return <Navigate replace to="/login" />;
-  }
-  
   return (
     <div className="container">
 
@@ -241,6 +237,18 @@ const currentUser = AuthService.getCurrentUser();
                       validations={[required]}
                     /> 
                   </div>{/* OK */}
+
+                  <div className="form-group" >
+                    <label htmlFor="passenger">Passenger <span className="etoilobligatoire">*</span></label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="passenger"
+                      value={passenger}
+                      onChange={onChangePassenger}
+                      validations={[required]}
+                    /> 
+                  </div> {/* generate automatique in localStorage*/}
 
                   
 

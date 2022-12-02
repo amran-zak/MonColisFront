@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Navigate } from 'react-router-dom';
 import TrajetService from "../services/trajets.service";
+import AuthService from "../services/auth.service";
 
 
 
 
-function Child({ data, setChild}) {
+function Child({ data, setChild }) {
     const date = new Date()
 
-   
+
+
+
 
     const annuler = (id) => {
         id ?
@@ -19,7 +23,7 @@ function Child({ data, setChild}) {
     }
 
     const delete_r = (id) => {
-        
+
         id ?
             TrajetService.deleteReservation(id).then(response => {
                 data = data.filter((d) => d.id != id)
@@ -28,48 +32,103 @@ function Child({ data, setChild}) {
             console.log(id)
     }
 
-    
+
 
     return (
         <>
-            {data.map(item => (
-                <div className="card" key={item.id}>
-                    <div className="card-body">
-                        <h3 className="card-subtitle mb-2 text-muted">{item.depart_city} {'-->'} {item.dest_city}</h3>
-                        {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(date.getDate() - 1))) ? (
-                            <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
-                                Annuler
-                            </button>
-                        ) : (
-                            <div></div>
-                        )}
+            <div className="Result">
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Ville de départ</th>
+                        <th>Ville d'arrivée</th>
+                        <th>poids</th>
+                        <th>prix</th>
+                        <th>prix Total</th>
+                        <th>date débart</th>
+                    </tr>
+                    {data.map(item => (
 
-                        {item.shipped ? (
-                            <div href={"/my-reservations/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
-                                Supprimer
-                            </div>
-                        ) : (
-                            <div></div>
-                        )}
+                        <tr key={item.id}>
+                            <td>
+                                <h3>
+                                    {item.name}
+                                </h3>
+                            </td>
 
-                    </div><hr />
-                </div>
-            ))
-            }
+
+                            <td>{item.depart_city}</td>
+                            <td>{item.dest_city}</td>
+                            <td>{item.weight}</td>
+                            <td>{item.price}</td>
+                            <td>{item.total_price}</td>
+                            <td>{item.depart_date}</td>
+                            <td>
+                                {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(new Date(item.depart_date).getDate() - 1))) ? (
+                                    <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
+                                        Annuler
+                                    </button>
+                                ) : (
+                                    <div></div>
+                                )}
+                            </td>
+                            <td>
+                            {item.shipped ? (
+        <div href={"/my-reservations/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
+            Supprimer
+        </div>
+    ) : (
+        <div></div>
+    )}
+                            </td>
+                        </tr>
+
+                    ))
+                    }
+                </table>
+            </div>
         </>
     );
 }
 
+
+{/* <div className="card" key={item.id}>
+<div className="card-body">
+    <h3 className="card-subtitle mb-2 text-muted">{item.depart_city} {'-->'} {item.dest_city}</h3>
+    {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(date.getDate() - 1))) ? (
+        <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
+            Annuler
+        </button>
+    ) : (
+        <div></div>
+    )}
+
+    {item.shipped ? (
+        <div href={"/my-reservations/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
+            Supprimer
+        </div>
+    ) : (
+        <div></div>
+    )}
+
+</div><hr />
+</div> */}
+
 function MyReservations() {
+    const currentUser = AuthService.getCurrentUser();
 
     const [colis, setColis] = useState(undefined);
     const [colis_shipped, setColis_shipped] = useState(undefined);
     const [message, setMessage] = useState(undefined);
 
     useEffect(() => {
-        TrajetService.getReservation('637650e4c5bf5e6cbcc8db10').then(response => {
+        if(currentUser){
+
+       
+        TrajetService.getReservation(currentUser.id).then(response => {
             let temp = []
             let temp_shipped = []
+            console.log(response.data)
             if (response.data.data) {
                 response.data.data.forEach(element => {
                     element.shipped ?
@@ -83,7 +142,8 @@ function MyReservations() {
                             arrival_date: element._id_trajet[0].arrival_date,
                             name: element._id_passager[0].name,
                             weight: element.weight,
-                            price: element.total_price,
+                            price: element.price,
+                            total_price: element.total_price,
                             shipped: element.shipped,
                         })
                         :
@@ -98,7 +158,8 @@ function MyReservations() {
                             arrival_date: element._id_trajet[0].arrival_date,
                             name: element._id_passager[0].name,
                             weight: element.weight,
-                            price: element.total_price,
+                            price: element.price,
+                            total_price: element.total_price,
                         })
                 })
                 setColis(temp)
@@ -111,9 +172,12 @@ function MyReservations() {
         }).catch(e => {
             console.log(e.message);
         });
-
+    }
     },
         [])
+    if (!currentUser) {
+        return <Navigate replace to="/login" />;
+    }
 
 
     return (
@@ -122,13 +186,13 @@ function MyReservations() {
             {colis ? (
                 <div>
                     <h1> Mes colis en cours </h1>
-                    <Child data={colis_shipped} setChild={setColis_shipped}/>
+                    <Child data={colis} setChild={setColis} />
 
                     <h1> Mes colis </h1>
                     <div>
 
                     </div>
-                    <Child data={colis} setChild={setColis}/>
+                    <Child data={colis_shipped} setChild={setColis_shipped} />
                 </div>
             ) : (
                 <div>

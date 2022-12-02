@@ -26,7 +26,7 @@ function App() {
             <Route  path="/add-trajet" element={<AddTrajets/>} />
             {/* <Route  path="/reserve-trajet" element={<ReserveTrajet/>} /> */}
             <Route  path="/my-reservations" element={<MyReservations/>} />
-            {/* <Route  path="/my-trajets" element={<MyTrajets/>} /> */}
+            <Route  path="/my-trajets" element={<MyTrajets/>} />
             {/* <Route  path="/search-result" element={<Result/>} /> */}
 
             <Route  path="/*" element={<PageNoFound/>} />

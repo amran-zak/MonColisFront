@@ -21,8 +21,12 @@ const required = (value) => {
 
 
 
-function Child({ data }) {
-
+function Child({ data, navigate }) {
+    
+    const returnLogin = () => {
+        alert( "Login" )
+        return <navigate replace to="/login" />;
+    }
     const form = useRef();
     const [messageR, setMessageR] = useState(undefined);
 
@@ -37,12 +41,20 @@ function Child({ data }) {
     };
     
     const reserve = (item) => {
+        const currentUser = AuthService.getCurrentUser();
+        if (!currentUser) {
+           returnLogin()
+        } else {
         set_id_trajet(item._id)
         set_id_passager(item.passenger[0]._id)
         setPrice(item.price)
-        item.weight = item.weight - weight
+        if(weight <= item.weight) {
+            item.weight = item.weight - weight
+        }
+        }
     }
 
+   
 
 
 
@@ -51,7 +63,7 @@ function Child({ data }) {
         e.preventDefault();
         const currentUser = AuthService.getCurrentUser();
         if (!currentUser) {
-            alert("Connect toi d'abord")
+           returnLogin()
         } else {
             form.current.validateAll();
 
@@ -251,7 +263,7 @@ function Accueil() {
             {
                 trajets ? (
                     <div>
-                        <Child data={trajets.result}/>
+                        <Child data={trajets.result} navigate={Navigate} />
                     </div>
                 ) :
                     (

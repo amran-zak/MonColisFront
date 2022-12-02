@@ -1,10 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Navigate } from 'react-router-dom';
 import TrajetService from "../services/trajets.service";
+import AuthService from "../services/auth.service";
+
 
 
 
 function Child({ data, setChild }) {
     const date = new Date()
+
+
+
+
 
     const annuler = (id) => {
         id ?
@@ -13,99 +20,173 @@ function Child({ data, setChild }) {
                 setChild(data)
             }).catch(err => console.log(err.message)) :
             console.log(id)
-
-
     }
+
+    const delete_r = (id) => {
+
+        id ?
+            TrajetService.deleteReservation(id).then(response => {
+                data = data.filter((d) => d.id != id)
+                setChild(data)
+            }).catch(err => console.log(err.message)) :
+            console.log(id)
+    }
+
+
+
     return (
         <>
-            {data.map(item => (
-                <div className="card" key={item.id}>
-                    <div className="card-body">
-                        <h3 className="card-subtitle mb-2 text-muted">{item.depart_city} {'-->'} {item.dest_city}</h3>
-                        {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(date.getDate() - 1))) ? (
-                            <button href={"/my-reservations/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
-                                Livre
-                            </button>
-                        ) : (<button href={"/my-reservations/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
-                        Supprimer
-                    </button>)}
+            <div className="Result">
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Ville de départ</th>
+                        <th>Ville d'arrivée</th>
+                        <th>poids</th>
+                        <th>prix</th>
+                        <th>prix Total</th>
+                        <th>date débart</th>
+                    </tr>
+                    {data.map(item => (
 
-                    </div><hr />
-                </div>
-            ))}
+                        <tr key={item.id}>
+                            <td>
+                                <h3>
+                                    {item.name}
+                                </h3>
+                            </td>
+
+
+                            <td>{item.depart_city}</td>
+                            <td>{item.dest_city}</td>
+                            <td>{item.weight}</td>
+                            <td>{item.price}</td>
+                            <td>{item.total_price}</td>
+                            <td>{item.depart_date}</td>
+                            <td>
+                                {(!item.available && date < new Date(new Date(item.depart_date).setDate(new Date(item.depart_date).getDate() - 1))) ? (
+                                    <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
+                                        Annuler
+                                    </button>
+                                ) : (
+                                    <div></div>
+                                )}
+                            </td>
+                            <td>
+                                {!item.available ? (
+                                    <div href={"/my-trajets/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
+                                        Supprimer
+                                    </div>
+                                ) : (
+                                    <div></div>
+                                )}
+                            </td>
+                        </tr>
+
+                    ))
+                    }
+                </table>
+            </div>
         </>
     );
 }
 
-function MyTrajet() {
 
-    const [colis, setColis] = useState(undefined);
-    const [colis_shipped, setColis_shipped] = useState(undefined);
+{/* <div className="card" key={item.id}>
+<div className="card-body">
+    <h3 className="card-subtitle mb-2 text-muted">{item.depart_city} {'-->'} {item.dest_city}</h3>
+    {(!item.available && date < new Date(new Date(item.depart_date).setDate(date.getDate() - 1))) ? (
+        <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
+            Annuler
+        </button>
+    ) : (
+        <div></div>
+    )}
+
+    {item.available ? (
+        <div href={"/my-reservations/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
+            Supprimer
+        </div>
+    ) : (
+        <div></div>
+    )}
+
+</div><hr />
+</div> */}
+
+function MyTrajets() {
+    const currentUser = AuthService.getCurrentUser();
+
+    const [trajets, setTrajets] = useState(undefined);
+    const [trajets_available, setTrajets_available] = useState(undefined);
     const [message, setMessage] = useState(undefined);
 
     useEffect(() => {
-        TrajetService.getReservation('637650e4c5bf5e6cbcc8db10').then(response => {
-            let temp = []
-            let temp_shipped = []
-            if (response.data.data) {
-                response.data.data.forEach(element => {
-                    element.shipped ?
-                        temp_shipped.push({
-                            id: element._id,
-                            depart_city: element._id_trajet[0].depart_city,
-                            depart_country: element._id_trajet[0].depart_country,
-                            dest_city: element._id_trajet[0].dest_city,
-                            dest_country: element._id_trajet[0].dest_country,
-                            depart_date: element._id_trajet[0].depart_date,
-                            arrival_date: element._id_trajet[0].arrival_date,
-                            name: element._id_passager[0].name,
-                            weight: element.weight,
-                            price: element.total_price,
-                            shipped: element.shipped,
-                        })
-                        :
-                        temp.push({
-                            id: element._id,
-                            depart_city: element._id_trajet[0].depart_city,
-                            depart_country: element._id_trajet[0].depart_country,
-                            dest_city: element._id_trajet[0].dest_city,
-                            dest_country: element._id_trajet[0].dest_country,
-                            depart_date: element._id_trajet[0].depart_date,
-                            shipped: element.shipped,
-                            arrival_date: element._id_trajet[0].arrival_date,
-                            name: element._id_passager[0].name,
-                            weight: element.weight,
-                            price: element.total_price,
-                        })
-                })
-                setColis(temp)
-                setColis_shipped(temp_shipped)
-            } else {
-                setMessage(response.data.message)
-            };
+        if (currentUser) {
 
 
-        }).catch(e => {
-            console.log(e.message);
-        });
+            TrajetService.getTrajets(currentUser.id).then(response => {
+                let temp = []
+                let temp_available = []
+                if (response.data.data) {
+                    response.data.data.forEach(element => {
+                        element.available ?
+                            temp_available.push({
+                                id: element._id,
+                                depart_city: element.depart_city,
+                                dest_city: element.dest_city,
+                                depart_date: element.depart_date,
+                                arrival_date: element.arrival_date,
+                                weight: element.weight,
+                                price: element.price,
+                                available: element.available,
+                            })
+                            :
+                            temp.push({
+                                id: element._id,
+                                depart_city: element.depart_city,
+                                dest_city: element.dest_city,
+                                depart_date: element.depart_date,
+                                available: element.available,
+                                arrival_date: element.arrival_date,
+                                weight: element.weight,
+                                price: element.price
+                            })
+                    })
+                    setTrajets(temp)
+                    setTrajets_available(temp_available)
+                } else {
+                    setMessage(response.data.message)
+                };
 
+            }).catch(e => {
+                console.log(e);
+            });
+        }
     },
         [])
+    if (!currentUser) {
+        return <Navigate replace to="/login" />;
+    }
 
 
     return (
         <div className="container">
 
-            {colis ? (
+            {trajets ? (
                 <div>
-                    <h1> Mes colis en cours </h1>
-                    <Child data={colis_shipped} />
+                    <h1> Mes trajets disponnible </h1>
+                    <Child data={trajets_available} setChild={setTrajets_available} />
 
-                    <h1> Mes colis </h1>
+                    <h1> Mes trajets reservés </h1>
                     <div>
-
+                        {/* <Child data={trajets_available} setChild={setTrajets_available} /> */}
                     </div>
-                    <Child data={colis} setChild={setColis} />
+
+                    <h1> Mes trajets indisponnible </h1>
+                    <Child data={trajets} setChild={setTrajets} />
+
+
                 </div>
             ) : (
                 <div>
@@ -117,4 +198,4 @@ function MyTrajet() {
     );
 };
 
-export default MyTrajet;
+export default MyTrajets;
