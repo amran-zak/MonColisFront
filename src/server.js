@@ -20,4 +20,11 @@ APIs.API_URL_TRAJET= axios.create({
   }
 });
 
+
+APIs.API_URL_ADMIN = axios.create({
+  baseURL:  URL + "api/admin",
+  headers: {
+    "Content-type": "application/json"
+  }
+});
 export default APIs;

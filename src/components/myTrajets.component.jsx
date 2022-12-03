@@ -46,6 +46,7 @@ function Child({ data, setChild }) {
                         <th>prix</th>
                         <th>prix Total</th>
                         <th>date débart</th>
+                        <th>date d'arrivée</th>
                     </tr>
                     {data.map(item => (
 
@@ -62,7 +63,8 @@ function Child({ data, setChild }) {
                             <td>{item.weight}</td>
                             <td>{item.price}</td>
                             <td>{item.total_price}</td>
-                            <td>{item.depart_date}</td>
+                            <td>{new Date(item.depart_date).toDateString()}</td>
+                            <td>{new Date(item.arrival_date).toDateString()}</td>
                             <td>
                                 {(!item.available && date < new Date(new Date(item.depart_date).setDate(new Date(item.depart_date).getDate() - 1))) ? (
                                     <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
@@ -77,6 +79,71 @@ function Child({ data, setChild }) {
                                     <div href={"/my-trajets/delete:" + item.id} className="card-link" onClick={() => delete_r(item.id)}>
                                         Supprimer
                                     </div>
+                                ) : (
+                                    <div></div>
+                                )}
+                            </td>
+                        </tr>
+
+                    ))
+                    }
+                </table>
+            </div>
+        </>
+    );
+}
+
+function Child_1({ data, setChild }) {
+    const date = new Date()
+
+
+    const confirmer = (id) => {
+        id ?
+            TrajetService.confirmLivraison(id).then(response => {
+                console.log(response)
+                data = data.filter((d) => d.id != id)
+                setChild(data)
+            }).catch(err => console.log(err)) :
+            console.log(id)
+    }
+    return (
+        <>
+            <div className="Result">
+                <table>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Ville de départ</th>
+                        <th>Ville d'arrivée</th>
+                        <th>poids reservé</th>
+                        <th>prix</th>
+                        <th>prix Total</th>
+                        <th>date débart</th>
+                        <th>date d'arrivée</th>
+                    </tr>
+                    {data.map(item => (
+
+                        <tr key={item._id}>
+                            <td>
+                                <h3>
+                                    {item._id_em[0].name}
+                                </h3>
+                            </td>
+
+
+                            <td>{item._id_trajet[0].depart_city}</td>
+                            <td>{item._id_trajet[0].dest_city}</td>
+                            <td>{item.weight}</td>
+                            <td>{item.price}</td>
+                            <td>{item.total_price}</td>
+                            <td>{new Date(item._id_trajet[0].depart_date).toDateString()}</td>
+                            <td>{new Date(item._id_trajet[0].arrival_date).toDateString()}</td>
+                           
+                            <td>
+                            {/* && date > new Date(item._id_trajet[0].arrival_date) */}
+                                {(!item.shipped ) ? (
+                                    <button href={"/my-trajets/confirmer:" + item._id} className="card-link" onClick={() => confirmer(item._id)}>
+                                        Confirmer la Livraison
+                                    </button>
                                 ) : (
                                     <div></div>
                                 )}
@@ -121,6 +188,10 @@ function MyTrajets() {
     const [trajets_available, setTrajets_available] = useState(undefined);
     const [message, setMessage] = useState(undefined);
 
+    const [colis, setColis] = useState(undefined);
+    const [colis_shipped, setColis_shipped] = useState(undefined);
+    const [message_1, setMessage_1] = useState(undefined);
+
     useEffect(() => {
         if (currentUser) {
 
@@ -162,6 +233,20 @@ function MyTrajets() {
             }).catch(e => {
                 console.log(e);
             });
+
+            TrajetService.getMyTrajetsReserved(currentUser.id).then(
+                (response) => {
+                    if (response.data.data) {
+                        setColis(response.data.data)
+                    } else {
+                        setMessage_1(response.data.message)
+                    }
+
+                }
+            ).catch(e => {
+                console.log(e)
+            }
+            )
         }
     },
         [])
@@ -180,7 +265,16 @@ function MyTrajets() {
 
                     <h1> Mes trajets reservés </h1>
                     <div>
-                        {/* <Child data={trajets_available} setChild={setTrajets_available} /> */}
+                        {message_1 ? (
+                            <div>
+<h2>{message_1}</h2>
+                            </div>
+                        ) : (
+                            <div>
+<Child_1 data={colis} setChild={setColis} />
+                            </div>
+                        )}
+                        
                     </div>
 
                     <h1> Mes trajets indisponnible </h1>

@@ -61,6 +61,7 @@ const getReservation =  async (_id_em) => {
          return err;
      }
  }
+
  
  const deleteReservation =  async (id) => {
     try {
@@ -84,6 +85,29 @@ const getReservation =  async (_id_em) => {
      }
  }
 
+ const getMyTrajetsReserved =  async (_id_passager) => {
+    try {
+         const response = await API_URL_TRAJET.post(
+             "/my-trajets-reserve" , {headers: authHeader(), _id_passager: _id_passager }
+         );
+         return response;
+     } catch (err) {
+         return err;
+     }
+ }
+
+ const confirmLivraison =  async (id) => {
+    try {
+        console.log(id)
+         const response = await API_URL_TRAJET.get(
+             "/my-trajets/confirm/" + id, {headers: authHeader()}
+         );
+         return response;
+     } catch (err) {
+         return err;
+     }
+ }
+
 
 export default {
     searchTrajet,
@@ -92,5 +116,7 @@ export default {
     getReservation,
     annulerReservation,
     deleteReservation,
-    getTrajets
+    getTrajets,
+    getMyTrajetsReserved,
+    confirmLivraison
 };

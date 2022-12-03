@@ -46,6 +46,7 @@ function Child({ data, setChild }) {
                         <th>prix</th>
                         <th>prix Total</th>
                         <th>date débart</th>
+                        <th>date d'arrivée</th>
                     </tr>
                     {data.map(item => (
 
@@ -62,7 +63,8 @@ function Child({ data, setChild }) {
                             <td>{item.weight}</td>
                             <td>{item.price}</td>
                             <td>{item.total_price}</td>
-                            <td>{item.depart_date}</td>
+                            <td>{new Date(item.depart_date).toDateString()}</td>
+                            <td>{new Date(item.arrival_date).toDateString()}</td>
                             <td>
                                 {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(new Date(item.depart_date).getDate() - 1))) ? (
                                     <button href={"/my-reservati ons/annuler:" + item.id} className="card-link" onClick={() => annuler(item.id)}>
@@ -185,10 +187,10 @@ function MyReservations() {
 
             {colis ? (
                 <div>
-                    <h1> Mes colis en cours </h1>
+                    <h1> Mes colis en cours</h1>
                     <Child data={colis} setChild={setColis} />
 
-                    <h1> Mes colis </h1>
+                    <h1>Mes colis livrés</h1>
                     <div>
 
                     </div>

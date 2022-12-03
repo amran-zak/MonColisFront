@@ -91,15 +91,16 @@ function Child({ data, navigate }) {
         <>
             <div className="Result">
                 <table>
-                    <tr>
+                    <tbody>
                         <th>Nom</th>
                         <th>Ville de départ</th>
                         <th>Ville d'arrivée</th>
                         <th>poids disponible</th>
                         <th>prix</th>
+                        <th>Date débart</th>
+                        <th>Date d'arrivé</th>
 
-
-                    </tr>
+                    </tbody>
                     {data.map(item => (
 
                         <tr key={item._id}>
@@ -113,7 +114,8 @@ function Child({ data, navigate }) {
                             <td>{item.weight}</td>
                             <td>{item.price}</td>
                             <td>{item.name}</td>
-
+                            <td>{new Date(item.depart_date).toDateString()}</td>
+                            <td>{new Date(item.arrival_date).toDateString()}</td>
                             <td>
                                 {
                                     messageR ? (
@@ -132,6 +134,7 @@ function Child({ data, navigate }) {
                                                     value={weight}
                                                     onChange={onChangeWeight}
                                                     max={item.weight}
+                                                    min='0'
                                                     validations={[required]}
                                                 />
 

@@ -10,6 +10,8 @@ import ReserveTrajet from './components/reserveTrajet.component'
 import MyReservations from './components/myReservations.component';
 import MyTrajets from './components/myTrajets.component'
 
+import AdminBoard from './components/adminBoard'
+
 import PageNoFound from './pageNoFound.jsx'
 
 function App() {
@@ -29,6 +31,8 @@ function App() {
             <Route  path="/my-trajets" element={<MyTrajets/>} />
             {/* <Route  path="/search-result" element={<Result/>} /> */}
 
+            <Route  path="/admin" element={<AdminBoard/>} />
+            
             <Route  path="/*" element={<PageNoFound/>} />
           </Routes>
 

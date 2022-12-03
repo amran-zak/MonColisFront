@@ -42,9 +42,7 @@ const currentUser = AuthService.getCurrentUser();
   const [message, setMessage] = useState("");
 
   const [depart_city, setDepart_city] = useState("");
-  const [depart_country, setDepart_country] = useState("");
   const [dest_city, setDest_city] = useState("");
-  const [dest_country, setDest_country] = useState(""); 
   const [depart_date, setDepart_date] = useState("");
   const [arrival_date, setArrival_date] = useState("");
   const [weight, setWeight] = useState("");
@@ -59,20 +57,14 @@ const currentUser = AuthService.getCurrentUser();
     const depart_city = e.target.value;
     setDepart_city(depart_city);
   };
-  const onChangeDepart_country = (e) => {
-    const depart_country = e.target.value;
-    setDepart_country(depart_country);
-  };
+ 
   
   const onChangeDest_city = (e) => {
     const dest_city = e.target.value;
     setDest_city(dest_city);
   };
 
-  const onChangeDest_country = (e) => {
-    const dest_country = e.target.value;
-    setDest_country(dest_country);
-  };
+
 
   const onChangeDepart_date = (e) => {
     const depart_date = e.target.value;
@@ -105,9 +97,7 @@ const currentUser = AuthService.getCurrentUser();
     if (checkBtn.current.context._errors.length === 0) {
       var data = {
         depart_city : depart_city,
-        depart_country: depart_country,
         dest_city: dest_city,
-        dest_country: dest_country,
         depart_date: depart_date,
         arrival_date: arrival_date,
         weight: weight,
@@ -159,18 +149,6 @@ const currentUser = AuthService.getCurrentUser();
 
 
                   <div className="form-group" >
-                    <label htmlFor="depart_country">Pays départ <span className="etoilobligatoire">*</span></label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="depart_country"
-                      value={depart_country}
-                      onChange={onChangeDepart_country}
-                      validations={[required]}
-                    /> 
-                  </div> {/* generate automatique */}
-
-                  <div className="form-group" >
                     <label htmlFor="dest_city">Ville Destination <span className="etoilobligatoire">*</span></label>
                     <input
                       type="text"
@@ -182,17 +160,6 @@ const currentUser = AuthService.getCurrentUser();
                     /> 
                   </div> {/* Select automatique */}
 
-                  <div className="form-group" >
-                    <label htmlFor="dest_country">Pays destination <span className="etoilobligatoire">*</span></label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="dest_country"
-                      value={dest_country}
-                      onChange={onChangeDest_country}
-                      validations={[required]}
-                    /> 
-                  </div> {/* generate automatique */}
 
                   <div className="form-group" >
                     <label htmlFor="depart_date">Date départ <span className="etoilobligatoire">*</span></label>
@@ -245,7 +212,7 @@ const currentUser = AuthService.getCurrentUser();
                   
 
                   <div className="form-group">
-                    <button className="btn btn-primary btn-block">Créer</button>
+                    <button className="btn btn-primary btn-block">Ajouter un trajet</button>
                   </div>
                 </div>
               )}
