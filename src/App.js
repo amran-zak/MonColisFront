@@ -1,6 +1,10 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 
+import Header from './components/header';
+import Footer2 from './components/footer';
+import Home from './components/home';
+
 import Accueil from './components/accueil.component'
 import Result from './components/result.component'
 import SignUp from './components/signUp.component';
@@ -12,17 +16,28 @@ import MyTrajets from './components/myTrajets.component'
 
 import AdminBoard from './components/adminBoard'
 
+import AuthService from './services/auth.service';
+
 import PageNoFound from './pageNoFound.jsx'
 
 function App() {
- 
+  const currentUser = AuthService.getCurrentUser();
   return (
     <div className="App">
-      <h1>Notre header</h1>
-      
-        
+      <Header/>
+        {
+          currentUser ? (
+            <h1>
+              Welcome {currentUser.name}
+            </h1>
+          ):(
+            <h1>
+          </h1>
+          )
+        }
+       
            <Routes>
-            <Route  path="/" element={<Accueil/>} />
+            <Route  path="/" element={<Home/>} />
             <Route  path="/sign-up" element={<SignUp/>} />
             <Route  path="/login" element={<Login/>} />
             <Route  path="/add-trajet" element={<AddTrajets/>} />
@@ -32,11 +47,11 @@ function App() {
             {/* <Route  path="/search-result" element={<Result/>} /> */}
 
             <Route  path="/admin" element={<AdminBoard/>} />
-            
+
             <Route  path="/*" element={<PageNoFound/>} />
           </Routes>
 
-          <h1>Notre footer</h1>
+          <Footer2/>
     </div>
   );
 }

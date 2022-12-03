@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import TrajetService from "../services/trajets.service";
 import AuthService from "../services/auth.service";
 
+import Table from 'react-bootstrap/Table';
 
 
 
@@ -37,7 +38,8 @@ function Child({ data, setChild }) {
     return (
         <>
             <div className="Result">
-                <table>
+                <Table striped bordered hover variant="dark">
+                    <thead>
                     <tr>
                         <th>Nom</th>
                         <th>Ville de départ</th>
@@ -48,8 +50,9 @@ function Child({ data, setChild }) {
                         <th>date débart</th>
                         <th>date d'arrivée</th>
                     </tr>
+                    </thead>
                     {data.map(item => (
-
+<tbody>
                         <tr key={item.id}>
                             <td>
                                 <h3>
@@ -71,7 +74,7 @@ function Child({ data, setChild }) {
                                         Annuler
                                     </button>
                                 ) : (
-                                    <div></div>
+                                    <p></p>
                                 )}
                             </td>
                             <td>
@@ -84,10 +87,10 @@ function Child({ data, setChild }) {
     )}
                             </td>
                         </tr>
-
+                        </tbody>
                     ))
                     }
-                </table>
+                </Table>
             </div>
         </>
     );
