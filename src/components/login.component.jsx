@@ -1,6 +1,15 @@
 import React, { useState } from "react";
-import '../css/Connexion.css';
+import '../css/Login.css';
  import Auth from "../services/auth.service";
+ import {
+  MDBBtn,
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBInput,
+  MDBCheckbox
+}
+from 'mdb-react-ui-kit';
 
 function Login() {
  
@@ -31,20 +40,24 @@ function Login() {
   const renderForm = (
     <div className="form">
       <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <label>Email </label>
-          <input type="email" name="uname" required />
-          {/* {// renderErrorMessage("uname")} */}
-        </div>
-        <div className="input-container">
-          <label>Password </label>
-          <input type="password" name="pass" required />
-          {/* {renderErrorMessage("pass")} */}
-        </div>
-        <div className="button-container">
-          <input type="submit" />
-        </div>
-      </form>
+        
+      
+
+      <MDBContainer fluid className='d-flex align-items-center justify-content-center bg-image' style={{ backgroundColor: '#000', color: '#000' }}>
+      <div className='mask gradient-custom-3'></div>
+      <MDBCard className='m-5' style={{maxWidth: '600px'}}>
+        <MDBCardBody className='px-5'>
+          <h2 className="text-uppercase text-center mb-5"> Login</h2>
+          <MDBInput wrapperClass='mb-4' label='Your Email' size='lg' id='form2' type='email' name="uname" required/>
+          <MDBInput wrapperClass='mb-4' label='Your Password' size='lg' id='form3' type='password'  name="pass" required/>
+          <div className='d-flex flex-row justify-content-center mb-4'>
+            <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
+          </div>
+          <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg'>Log in</MDBBtn>
+        </MDBCardBody>
+      </MDBCard>
+    </MDBContainer>
+    </form>
     </div>
   );
 

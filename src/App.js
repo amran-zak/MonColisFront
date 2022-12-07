@@ -20,6 +20,8 @@ import AuthService from './services/auth.service';
 
 import PageNoFound from './pageNoFound.jsx'
 
+
+
 function App() {
   const currentUser = AuthService.getCurrentUser();
   return (
@@ -49,6 +51,7 @@ function App() {
             <Route  path="/admin" element={<AdminBoard/>} />
 
             <Route  path="/*" element={<PageNoFound/>} />
+
           </Routes>
 
           <Footer2/>
