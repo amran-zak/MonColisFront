@@ -35,6 +35,9 @@ const Log_in = async (email, password) => {
   }
 }
 
+const logout = () => {
+  localStorage.removeItem("user");
+};
 
 const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
@@ -44,5 +47,6 @@ const getCurrentUser = () => {
 export default {
     register,
     Log_in,
-    getCurrentUser
+    getCurrentUser,
+    logout
 };

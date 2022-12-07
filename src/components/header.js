@@ -1,14 +1,26 @@
 // src/components/Header.js
 
 
-import React from 'react';
+import React, { useEffect, useState }from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AuthService from '../services/auth.service';
 
 const Header = () => {
 
-    const currentUser = AuthService.getCurrentUser();
+    const [currentUser, setCurrentUser] = useState(undefined); 
+
+	useEffect(() => {
+	const user = AuthService.getCurrentUser();
+	if (user) {
+      setCurrentUser(user);
+	}
+	}, []);
+
+	const logOut = () => {
+		AuthService.logout();
+		setCurrentUser(undefined);
+	};
 
     return (
         <div className="navbar bg-[#000000] text-white  px-16">
@@ -27,7 +39,7 @@ const Header = () => {
                            
                             <a href='/my-reservations'> <i className='fas fa-user'></i>Mes reservations</a>
                             <a href='/my-trajets'> <i className='fas fa-user'></i>Mes trajets</a>
-                            <a href='/sign-up'> <i className='fas fa-user'></i>Logout</a>
+                            <a href='/login'  onClick={logOut}> <i className='fas fa-user'></i>Logout</a>
                         </li>
                     ) : (
                         <li><a href='/sign-up'> <i className='fas fa-user'></i>Sign-up</a>
