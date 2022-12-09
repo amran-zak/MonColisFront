@@ -7,8 +7,8 @@
 
 .App {
   text-align: center;
-  background-color: black;
-  color: #fff;
+  /* background-color: black;
+  color: #fff; */
 }
 
 .App-logo {
@@ -36,13 +36,41 @@
 .App-link {
   color: #61dafb;
 }
+/* .Addtrajet-G {
+  height: 90vh;
+  background-color: #000;
+  color: #fff;
+} */
+.form-Trajet{
+  width: 40%;
+    text-align: center;
+    margin-left: 30%;
+    margin-top: 5%;
+    font-weight: bold;
+    height: 90vh;
+}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-  
+.button-reserve {
+  background-color: #141619;
+  color: #fff;
+  padding: 3%;
+  border-radius: 30%;
+  margin-top: 2%;
+  margin-left: 2%;
+  border: 1px solid green;
+}
+
+.button-reserve:hover {
+  background-color: #fff;
+  color: #000;
+  padding: 3%;
+  border-radius: 30%;
+  margin-top: 2%;
+  margin-left: 2%;
+  border: 1px solid green;
+}
+
+.testHubspot {
+  height: 80vh;
+  padding-top: 2%;
 }

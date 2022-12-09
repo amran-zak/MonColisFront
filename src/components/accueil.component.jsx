@@ -8,6 +8,12 @@ import '../css/resultatrecherche.css'
 import TrajetService from "../services/trajets.service";
 import AuthService from "../services/auth.service";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
+import Button from "react-bootstrap/Button";
+
+import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 const required = (value) => {
     if (!value) {
@@ -22,11 +28,12 @@ const required = (value) => {
 
 
 function Child({ data, navigate }) {
-    
+
     const returnLogin = () => {
-        alert( "Login" )
+        alert("Login")
         return <navigate replace to="/login" />;
     }
+
     const form = useRef();
     const [messageR, setMessageR] = useState(undefined);
 
@@ -35,26 +42,26 @@ function Child({ data, navigate }) {
     const [price, setPrice] = useState("");
     const [weight, setWeight] = useState("");
 
+  
+    const reserve = (item) => {
+        const currentUser = AuthService.getCurrentUser();
+        if (!currentUser) {
+            returnLogin()
+        } else {
+            set_id_trajet(item._id)
+            set_id_passager(item.passenger[0]._id)
+            setPrice(item.price)
+            if (weight <= item.weight) {
+                item.weight = item.weight - weight
+            }
+        }
+    }
     const onChangeWeight = (e) => {
         const weight = e.target.value;
         setWeight(weight);
     };
-    
-    const reserve = (item) => {
-        const currentUser = AuthService.getCurrentUser();
-        if (!currentUser) {
-           returnLogin()
-        } else {
-        set_id_trajet(item._id)
-        set_id_passager(item.passenger[0]._id)
-        setPrice(item.price)
-        if(weight <= item.weight) {
-            item.weight = item.weight - weight
-        }
-        }
-    }
 
-   
+
 
 
 
@@ -63,9 +70,8 @@ function Child({ data, navigate }) {
         e.preventDefault();
         const currentUser = AuthService.getCurrentUser();
         if (!currentUser) {
-           returnLogin()
+            returnLogin()
         } else {
-            form.current.validateAll();
 
             let data = {
                 weight: weight,
@@ -90,7 +96,7 @@ function Child({ data, navigate }) {
     return (
         <>
             <div className="Result">
-                <table>
+                {/* <table>
                     <tbody>
                         <th>Nom</th>
                         <th>Ville de départ</th>
@@ -151,7 +157,103 @@ function Child({ data, navigate }) {
 
                     ))
                     }
-                </table>
+                </table> */}
+
+                <MDBTable align='middle'>
+                    <MDBTableHead>
+                        <tr>
+                            <th scope='col'>Nom</th>
+                            <th scope='col'>Trajet</th>
+                            <th scope='col'>Poid disponible</th>
+                            <th scope='col'>Prix</th>
+                            <th scope='col'>Reservation</th>
+
+                        </tr>
+                    </MDBTableHead>
+                    <MDBTableBody>
+                        {data.map(item => (
+                            <tr key={item._id}>
+
+                                <td>
+                                    <div className='d-flex align-items-center'>
+                                        <img
+                                            src='https://tse3.mm.bing.net/th?id=OIP.dLfpF42QdcvxBbTGL0ylYgHaHa&pid=Api&P=0'
+                                            alt=''
+                                            style={{ width: '45px', height: '45px' }}
+                                            className='rounded-circle'
+                                        />
+                                        <div className='ms-3'>
+                                            <p className='fw-bold mb-1'>{item.passenger[0].name}</p>
+                                            <p className='text-muted mb-0'>{item.passenger[0].email}</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p className='fw-normal mb-2'>{item.depart_city} <i class="fa fa-arrow-right" aria-hidden="true"></i> {item.dest_city}</p>
+
+                                    <p   className='text-muted mb-0'>
+                                    {new Date(item.depart_date).toDateString()}  <i class="fa fa-arrow-right" aria-hidden="true"></i> {new Date(item.arrival_date).toDateString()}
+                                </p>
+                                </td>
+
+                                <td>
+                                    <MDBBadge color='success' pill>
+                                        {item.weight} KG
+                                    </MDBBadge>
+                                </td>
+
+
+                                <td>
+                                    <p className='fw-normal mb-2'> 1 kg <i class="fa fa-arrow-right" aria-hidden="true"></i> {item.price} €</p>
+
+                                    <p   className='text-muted mb-0'>
+                                    {weight } kg  <i class="fa fa-arrow-right" aria-hidden="true"></i> {item.price * weight} €
+                                </p>
+                                </td>
+
+                                <td>
+
+                                    {
+                                        messageR ? (
+                                            <div>
+                                                <h3>
+                                                    {messageR}
+                                                </h3>
+                                            </div>
+                                        ) :
+                                            (
+                                                <form onSubmit={handleReserveTrajet} ref={form}>
+                                                      <label htmlFor="price_total" name='test' value>
+                                                        <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        name="weight"
+                                                        value={weight}
+                                                        onChange={onChangeWeight}
+                                                        max={item.weight}
+                                                        min='0'
+                                                        validations={[required]}
+                                                    />
+ </label>
+                                                  
+                                                    <button   onClick={() => reserve(item)}  className="button-reserve">
+                                    Réserver
+                                </button>
+                                                </form>
+                                            )
+                                    }
+
+                                </td>
+
+
+                            </tr>
+
+                        ))
+                        }
+                    </MDBTableBody>
+                </MDBTable>
+
             </div>
         </>
     );
@@ -195,75 +297,75 @@ function Accueil() {
         e.preventDefault();
         setMessage("");
         setSuccessful(false);
-        form.current.validateAll();
 
-        if (checkBtn.current.context._errors.length === 0) {
-            var data = {
-                depart_city: depart_city,
-                dest_city: dest_city
-            };
-            TrajetService.searchTrajet(data).then(
-                (response) => {
-                    if (response.data.message) {
-                        setTrajets(undefined)
-                        setMessage(response.data.message)
-                    } else {
-                        setTrajets(response.data)
-                    }
-                }).catch(
-                    (error) => {
-                        setMessage(error.message);
-                    }
-                );
-        }
+
+        var data = {
+            depart_city: depart_city,
+            dest_city: dest_city
+        };
+        console.log(data)
+        TrajetService.searchTrajet(data).then(
+            (response) => {
+                if (response.data.message) {
+                    setTrajets(undefined)
+                    setMessage(response.data.message)
+                } else {
+                    setTrajets(response.data)
+                }
+            }).catch(
+                (error) => {
+                    setMessage(error.message);
+                }
+            );
+
     };
 
 
     return (
-        <div>
-            <h1>Ceci est un Accueil</h1>
+        <div> <div>
 
-            <Form onSubmit={handleAddTrajet} ref={form}>
+            <div className="banner-container">
+                <div className="text-center">
+                    <div className="App">
+                        <div classname="container h-100">
+                            <div classname="row h-100 justify-content-center align-items-center"></div>
+                            <h1 className=" text-6xl text-orange-600 font-bold">Welcome to MonColis</h1>
+                            <h4 className="text-4xl mt-8 text-black">Rechercher un trajet</h4>
+                            <div className="inputs-search-div">
+                            <InputGroup className="inputs-search">
+                                <FormControl
+                                    placeholder="Ville de départ "
+                                    aria-label="Search"
+                                    aria-describedby="basic-addon2"
+                                    name="depart_city"
+                                    value={depart_city}
+                                    onChange={onChangeDepart_city}
+                                    validations={[required]}
+                                />
 
-                <div>
-                    <div className="form-group" >
-                        <label htmlFor="depart_city">Ville départ <span className="etoilobligatoire">*</span></label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="depart_city"
-                            value={depart_city}
-                            onChange={onChangeDepart_city}
-                            validations={[required]}
-                        />
-                    </div>
-
-
-                    <div className="form-group" >
-                        <label htmlFor="dest_city">Ville Destination <span className="etoilobligatoire">*</span></label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="dest_city"
-                            value={dest_city}
-                            onChange={onChangeDest_city}
-                            validations={[required]}
-                        />
-                    </div> {/* Select automatique */}
-
-
-
-
-                    <div className="form-group">
-                        <button className="btn btn-primary btn-block">Chercher</button>
+                            </InputGroup>
+                            <br />
+                            <InputGroup className="inputs-search">
+                                <FormControl
+                                    placeholder="Ville d'arrivé"
+                                    aria-label="Search"
+                                    aria-describedby="basic-addon2"
+                                    name="dest_city"
+                                    value={dest_city}
+                                    onChange={onChangeDest_city}
+                                    validations={[required]}
+                                />
+                            </InputGroup>
+                            <br />
+                            <Button variant="primary" id="button-addon2" onClick={handleAddTrajet}>
+                                Search
+                            </Button>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
-
-                <CheckButton style={{ display: "none" }} ref={checkBtn} />
-            </Form>
-
-
-            {
+                {
                 trajets ? (
                     <div>
                         <Child data={trajets.result} navigate={Navigate} />
@@ -275,6 +377,12 @@ function Accueil() {
                         </div>
                     )
             }
+            </div>
+
+            
+        </div>
+
+          
         </div>
     );
 }

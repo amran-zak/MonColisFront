@@ -23,7 +23,9 @@ function Login() {
     var { uname, pass } = document.forms[0];
 
     Auth.Log_in(uname.value, pass.value).then(
+      
         response => {
+          console.log(response)
             if(response.response) {
                 setMessage(response.response.data.message)
             }else{
@@ -54,6 +56,11 @@ function Login() {
             <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
           </div>
           <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg'>Log in</MDBBtn>
+          <div>
+            <p>
+            Vous n'avez pas un compte 😁. <a href="/sign-up">Inscrivez-vous !</a>
+            </p>
+          </div>
         </MDBCardBody>
       </MDBCard>
     </MDBContainer>
@@ -64,7 +71,6 @@ function Login() {
   return (
     <div className="app">
       <div className="login-form">
-        <div className="title">Sign In</div>
         {message ? <div>{message}</div> : renderForm}
       </div>
     </div>

@@ -5,7 +5,7 @@ import Form from "react-validation/build/form";
 
 import TrajetService from "../services/trajets.service";
 
-
+import '../css/AddTrajet.css'
 
 
 
@@ -129,14 +129,11 @@ function AddTrajets() {
   };
 
   return (
-    <div className="container">
-
-      <div className="sous-container">
-        <div>
+        <div className="Addtrajet-G">
           <h3>Ajouter un Trajet</h3>
           <div className="form-Trajet">
           
-            <Form onSubmit={handleAddTrajet} ref={form}>
+            <Form onSubmit={handleAddTrajet} ref={form} className='form-add-trajet'>
               {!successful && (
                 <div>
                   <div className="form-group" >
@@ -253,6 +250,7 @@ function AddTrajets() {
                   
 
                   <div className="form-group">
+                  <br /><br />
                     <button className="btn btn-primary btn-block">Créer</button>
                   </div>
                 </div>
@@ -275,10 +273,6 @@ function AddTrajets() {
           </div>
 
         </div>
-
-      </div>
-
-    </div>
   );
 };
 

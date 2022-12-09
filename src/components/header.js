@@ -45,7 +45,7 @@ const Header = () => {
                         <li><a href='/sign-up'> <i className='fas fa-user'></i>Sign-up</a>
                         <a href='/login'> <i className='fas fa-user'></i>Login</a></li>
                     )}
-                    <li><a>  <i className="fas fa-phone"></i>Contact Us</a></li>
+                    <li><a href='contact-us'>  <i className="fas fa-phone"></i>Contact Us</a></li>
 
                 </ul>
             </div>

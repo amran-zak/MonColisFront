@@ -4,6 +4,7 @@ import TrajetService from "../services/trajets.service";
 import AuthService from "../services/auth.service";
 
 import Table from 'react-bootstrap/Table';
+import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 
 
@@ -38,7 +39,7 @@ function Child({ data, setChild }) {
     return (
         <>
             <div className="Result">
-                <Table striped bordered hover variant="dark">
+                {/* <Table striped bordered hover variant="dark">
                     <thead>
                     <tr>
                         <th>Nom</th>
@@ -90,7 +91,90 @@ function Child({ data, setChild }) {
                         </tbody>
                     ))
                     }
-                </Table>
+                </Table> */}
+
+
+
+                <MDBTable align='middle'>
+                    <MDBTableHead>
+                        <tr>
+                            <th scope='col'>Nom</th>
+                            <th scope='col'>Trajet</th>
+                            <th scope='col'>Prix</th>
+                            <th>Statut</th>
+                        </tr>
+                    </MDBTableHead>
+                    <MDBTableBody>
+                        {data.map(item => (
+                            <tr key={item.id}>
+
+                                <td>
+                                    <div className='d-flex align-items-center'>
+                                        <img
+                                            src='https://tse3.mm.bing.net/th?id=OIP.dLfpF42QdcvxBbTGL0ylYgHaHa&pid=Api&P=0'
+                                            alt=''
+                                            style={{ width: '45px', height: '45px' }}
+                                            className='rounded-circle'
+                                        />
+                                        <div className='ms-3'>
+                                            <p className='fw-bold mb-1'>{item.name}</p>
+                                            <p className='text-muted mb-0'>{item.email}</p>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <p className='fw-normal mb-2'>{item.depart_city} <i class="fa fa-arrow-right" aria-hidden="true"></i> {item.dest_city}</p>
+
+                                    <p   className='text-muted mb-0'>
+                                    {new Date(item.depart_date).toDateString()}  <i class="fa fa-arrow-right" aria-hidden="true"></i> {new Date(item.arrival_date).toDateString()}
+                                </p>
+                                </td>
+
+
+
+                                <td>
+                                    <p className='fw-normal mb-2'> 1 kg <i class="fa fa-arrow-right" aria-hidden="true"></i> {item.price} €</p>
+
+                                    <p   className='text-muted mb-0'>
+                                    {item.weight } kg  <i class="fa fa-arrow-right" aria-hidden="true"></i> {item.total_price} €
+                                </p>
+                                </td>
+
+                              
+                            <td>
+                            {item.shipped ? (
+        // <div href={"/my-reservations/delete:" + item.id} className="button-reserve" onClick={() => delete_r(item.id)}>
+        //     Supprimer
+        // </div>
+        <div>
+        <MDBBadge color='success' pill>
+         Livré ✅
+     </MDBBadge>
+     </div>
+    ) : (
+     <div>
+        <MDBBadge color='warning' pill>
+         En cours ...
+     </MDBBadge></div>
+    )}
+                            </td>
+                            <td>
+                                {(!item.shipped && date < new Date(new Date(item.depart_date).setDate(new Date(item.depart_date).getDate() - 1))) ? (
+                                    <button href={"/my-reservati ons/annuler:" + item.id} className="button-reserve" onClick={() => annuler(item.id)}>
+                                        Annuler
+                                    </button>
+                                ) : (
+                                    <p></p>
+                                )}
+                            </td>
+
+                            </tr>
+
+                        ))
+                        }
+                    </MDBTableBody>
+                </MDBTable>
             </div>
         </>
     );
@@ -146,6 +230,7 @@ function MyReservations() {
                             depart_date: element._id_trajet[0].depart_date,
                             arrival_date: element._id_trajet[0].arrival_date,
                             name: element._id_passager[0].name,
+                            email: element._id_passager[0].email,
                             weight: element.weight,
                             price: element.price,
                             total_price: element.total_price,
@@ -162,6 +247,7 @@ function MyReservations() {
                             shipped: element.shipped,
                             arrival_date: element._id_trajet[0].arrival_date,
                             name: element._id_passager[0].name,
+                            email: element._id_passager[0].email,
                             weight: element.weight,
                             price: element.price,
                             total_price: element.total_price,
@@ -187,7 +273,6 @@ function MyReservations() {
 
     return (
         <div className="container">
-
             {colis ? (
                 <div>
                     <h1> Mes colis en cours</h1>

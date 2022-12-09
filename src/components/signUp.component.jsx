@@ -81,7 +81,7 @@ function SignUp() {
             <div className='mask gradient-custom-3'></div>
             <MDBCard className='m-5' style={{ maxWidth: '600px' }}>
               <MDBCardBody className='px-5'>
-                <h2 className="text-uppercase text-center mb-5">Create an account</h2>
+                <h2 className="text-uppercase text-center mb-5">Créer un compte</h2>
                 <MDBInput wrapperClass='mb-4' label='Your Name' size='lg' id='form1' type='text' value={name} required onChange={(e) => { handleChange(e) }} />
                 <MDBInput wrapperClass='mb-4' label='Your Email' size='lg' id='form2' type='email' value={email} required onChange={(e) => { handleEmailChange(e) }} />
                 <MDBInput wrapperClass='mb-4' label='Your Phone' size='lg' id='form6' type='number' value={phonenumber} required onChange={(e) => { handlePhoneNumberChange(e) }} />
@@ -90,7 +90,12 @@ function SignUp() {
                 <div className='d-flex flex-row justify-content-center mb-4'>
                   <MDBCheckbox name='flexCheck' id='flexCheckDefault' label='I agree all statements in Terms of service' />
                 </div>
-                <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg'  onClick={(e) => { handleSubmit(e) }}>Register</MDBBtn>
+                <MDBBtn className='mb-4 w-100 gradient-custom-4' size='lg'  onClick={(e) => { handleSubmit(e) }}>S'inscrire</MDBBtn>
+                <div>
+            <p>
+            Vous avez un compte 😁.<a href="/login">Connectez-vous !</a>
+            </p>
+          </div>
               </MDBCardBody>
             </MDBCard>
           </MDBContainer>

@@ -6,7 +6,7 @@ const Footer2 = () => {
     return (
 
         <div className="bg-[#000000] text-white">
-            <footer className="footer p-10 justify-items-center">
+            {/* <footer className="footer p-10 justify-items-center">
                 <div>
                     <span className="footer-title">Services</span>
                     <a className="link link-hover">Branding</a>
@@ -27,7 +27,7 @@ const Footer2 = () => {
                     <a className="link link-hover">Privacy policy</a>
                     <a className="link link-hover">Cookie policy</a>
                 </div>
-            </footer>
+            </footer> */}
             <div className="text-center py-8">
                 <p>Copyright © 2022 - All right reserved</p>
             </div>

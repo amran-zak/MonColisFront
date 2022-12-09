@@ -14,6 +14,9 @@ import ReserveTrajet from './components/reserveTrajet.component'
 import MyReservations from './components/myReservations.component';
 import MyTrajets from './components/myTrajets.component'
 
+import Contact from './components/contact.component';
+import { HubspotProvider } from '@aaronhayes/react-use-hubspot-form';
+
 import AdminBoard from './components/adminBoard'
 
 import AuthService from './services/auth.service';
@@ -39,7 +42,7 @@ function App() {
         }
        
            <Routes>
-            <Route  path="/" element={<Home/>} />
+            <Route  path="/" element={<Accueil/>} />
             <Route  path="/sign-up" element={<SignUp/>} />
             <Route  path="/login" element={<Login/>} />
             <Route  path="/add-trajet" element={<AddTrajets/>} />
@@ -49,6 +52,8 @@ function App() {
             {/* <Route  path="/search-result" element={<Result/>} /> */}
 
             <Route  path="/admin" element={<AdminBoard/>} />
+
+            <Route  path="/contact-us" element={<HubspotProvider><Contact/></HubspotProvider>} />
 
             <Route  path="/*" element={<PageNoFound/>} />
 
